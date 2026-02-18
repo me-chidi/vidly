@@ -1,0 +1,26 @@
+const error = require('../middleware/error');
+const auth = require('../routes/auth');
+const users = require('../routes/users');
+const rentals = require('../routes/rentals');
+const returns = require('../routes/returns');
+const movies = require('../routes/movies');
+const genres = require('../routes/genres');
+const customers = require('../routes/customers');
+const debug = require('debug')('app:startup')
+const morgan = require('morgan');
+const express = require('express');
+
+
+module.exports = function(app) {
+    app.use(express.json());
+    // app.use(morgan('tiny'));
+    // app.use(debug);
+    app.use('/api/users', users);
+    app.use('/api/auth', auth);
+    app.use('/api/movies', movies);
+    app.use('/api/genres', genres);
+    app.use('/api/customers', customers);
+    app.use('/api/rentals', rentals);
+    app.use('/api/returns', returns);
+    app.use(error); // make sure the error middleware is last on the list
+}

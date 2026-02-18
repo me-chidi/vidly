@@ -1,0 +1,4 @@
+{
+    "jwtPrivateKey": "1234",
+    "db": "mongodb://admin:ownerisme@localhost:27018/vidly_tests?authSource=admin"
+}
