@@ -13,9 +13,9 @@ router.post('/', auth, async (req, res) => {
     if (error) return res.status(400).send(error.details[0].message);
 
     const customer = await Customer.insertOne({
-        isGold: value.isGold,
-        name: value.name,
-        phone: value.phone
+        isGold: req.body.isGold,
+        name: req.body.name,
+        phone: req.body.phone
     }, { new: true });
 
     res.status(201).send(customer);

@@ -98,7 +98,7 @@ describe('/api/returns', () => {
     });
 
     it('should set the returnDate if input is valid', async () => {
-        const res = await exec();
+        await exec();
 
         const rentalInDb = await Rental.findById(rental._id);
         const diff = new Date() - rentalInDb.dateReturned;
@@ -109,14 +109,14 @@ describe('/api/returns', () => {
         rental.dateOut = moment().add(-7, 'days').toDate()        ;
         await rental.save();
 
-        const res = await exec();
+        await exec();
 
         const rentalInDb = await Rental.findById(rental._id);
         expect(rentalInDb.rentalFee).toBe(14);
     });
 
     it('should increase the movie stock if input is valid', async () => {
-        const res = await exec();
+        await exec();
 
         const movieInDb = await Movie.findById(movieId);
         expect(movieInDb.numberInStock).toBe(movie.numberInStock + 1);
@@ -125,7 +125,6 @@ describe('/api/returns', () => {
     it('should return the rental if input is valid', async () => {
         const res = await exec();
 
-        const rentalInDb = await Rental.findById(rental._id);
         expect(Object.keys(res.body)).toEqual(expect.arrayContaining([
             'dateOut', 'dateReturned', 'customer', 'movie', 'rentalFee'
         ]));

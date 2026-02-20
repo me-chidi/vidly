@@ -9,7 +9,7 @@ describe('testing the auth middleware', () => {
 
     beforeEach(() => {
         server = require('../../index');
-        token = new User().generateAuthToken();
+        token = new User({ isAdmin: true }).generateAuthToken();
     });
     afterEach(async () => { 
         await Genre.deleteMany({});
@@ -29,7 +29,7 @@ describe('testing the auth middleware', () => {
         expect(res.status).toBe(401);
     });
 
-    it('should return 400 if no token is invalid', async () => {
+    it('should return 400 if token is invalid', async () => {
         token = 'a';
         const res = await exec();
         expect(res.status).toBe(400);

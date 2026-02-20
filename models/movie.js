@@ -53,5 +53,5 @@ function validateMovieUpdate(movie) {
 }
 
 module.exports.Movie = Movie;
-module.exports.validate = validateMovie;
-module.exports.validateUpdate = validateMovieUpdate;
+module.exports.validateMovie = validateMovie;
+module.exports.validateMovieUpdate = validateMovieUpdate;

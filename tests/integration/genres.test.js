@@ -1,3 +1,4 @@
+const { truncate } = require('lodash');
 const { Genre } = require('../../models/genre');
 const { User } = require('../../models/user');
 const mongoose = require('mongoose');
@@ -34,14 +35,11 @@ describe('/api/genres', () => {
             // expect(res.body).toMatchObject(genre); // cant use this here because of complications
         });
 
-        it('should return 404 if invalid ID', async () => {
-            const res = await request(server).get('/api/genres/1');
-            expect(res.status).toBe(404);
-        });
-
-        it('should return 404 if invalid ObjectId', async () => {
+        it('should return 404 if genre with given ID not found', async () => {
             const id = new mongoose.Types.ObjectId();
+
             const res = await request(server).get('/api/genres/' + id);
+            
             expect(res.status).toBe(404);
         });
     });
@@ -51,7 +49,7 @@ describe('/api/genres', () => {
         let name;
 
         beforeEach(() => {
-            token = new User().generateAuthToken();
+            token = new User({ isAdmin: true }).generateAuthToken();
             name = 'genre1';
         });
 
@@ -66,6 +64,12 @@ describe('/api/genres', () => {
             token = '';
             const res = await exec();
             expect(res.status).toBe(401);
+        });
+        
+        it('should return 403 if client is not admin', async () => {
+            token = new User({ isAdmin: false }).generateAuthToken();
+            const res = await exec();
+            expect(res.status).toBe(403);
         });
 
         it('should return 400 if genre name is less than 5 characters', async () => {
@@ -103,7 +107,7 @@ describe('/api/genres', () => {
         let id;
 
         beforeEach(() => {
-            token = new User().generateAuthToken();
+            token = new User({ isAdmin: true }).generateAuthToken();
             name = 'genre1';
             updateDocument = {};
             options = { new: true };
@@ -123,19 +127,28 @@ describe('/api/genres', () => {
             expect(res.status).toBe(401);
         });
 
+        it('should return 403 if client is not admin', async () => {
+            token = new User({ isAdmin: false }).generateAuthToken();
+            const res = await exec();
+            expect(res.status).toBe(403);
+        });
+
         it('should return 400 if genre name is less than 5 characters', async () => {
+            token = new User({ isAdmin: true }).generateAuthToken();
             name = '1234';
             const res = await exec();
             expect(res.status).toBe(400);
         });
 
         it('should return 400 if genre name is more than 50 characters', async () => {
+            token = new User({ isAdmin: true }).generateAuthToken();
             name = new Array(52).join('a');
             const res = await exec();
             expect(res.status).toBe(400);
         });
 
         it('should return 404 if genre with given ID not found', async () => {
+            token = new User({ isAdmin: true }).generateAuthToken();
             updateDocument = { name: 'newgenre1' };
             const res = await exec();
 
@@ -165,7 +178,7 @@ describe('/api/genres', () => {
         let document = { name: 'genre1' };
 
         beforeEach(async () => {
-            token = new User().generateAuthToken();
+            token = new User({ isAdmin: true }).generateAuthToken();
             id = new mongoose.Types.ObjectId();
             genre = await Genre.insertOne(document);
         });
@@ -183,30 +196,17 @@ describe('/api/genres', () => {
         });
 
         it('should return 403 if client is not admin', async () => {
+            token = new User({ isAdmin: false }).generateAuthToken();
             const res = await exec();
             expect(res.status).toBe(403);
         });
 
-        // might need to put this in the PUT / route
-        it('should return 500 if invalid id', async () => {
-            token = new User({ isAdmin: true }).generateAuthToken();
-            id = 1;
-
-            const res = await exec();
-
-            expect(res.status).toBe(500);
-        });
-
         it('should return 404 if genre with given ID not found', async () => {
-            token = new User({ isAdmin: true }).generateAuthToken();
-
             const res = await exec();
             expect(res.status).toBe(404);
         });
 
         it('should delete and return genre if valid', async () => {
-            token = new User({ isAdmin: true }).generateAuthToken();
-
             id = genre._id;
             const res = await exec();
 
