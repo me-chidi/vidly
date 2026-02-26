@@ -7,6 +7,7 @@ require('./startup/db')();
 require('./startup/config')();
 require('./startup/validation')();
 require('./startup/prod')(app);  // might want to conditionally load this module
+require('./workers/customerWorker');
 
 
 // Promise.reject(new Error('Something failed misreably'));

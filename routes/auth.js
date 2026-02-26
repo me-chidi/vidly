@@ -1,54 +1,29 @@
+// this endpoint is responsible for checking if a user exists
+// this is basically a login route, the post method is what is being used
+const validate = require('../middleware/validate');
 const Joi = require('joi');
-const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
-const { User, validateUpdate } = require('../models/user')
+const { User } = require('../models/user');
 
-router.get('/', async (req, res) => {
-    const users = await User.find().limit(10).sort({ name: 1 });
-    res.status(200).send(users)    
-});
-
-// working with just post for now
-router.post('/', async (req, res) => {
-    const { error, value } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
+router.post('/', validate(validateUser), async (req, res) => {
     let user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(400).send('Invalid email or password');
+    if (!user) return res.status(400).json({ error: 'Invalid email or password' });
 
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) return res.status(400).send('Invalid email or password');
+    if (!validPassword) return res.status(400).json({ error: 'Invalid email or password' });
 
     const token = user.generateAuthToken();
-    res.send(token);
+    res.status(200).json({ token });
 });
 
-router.put('/:id', async (req, res) => {
-    const { error, value } = validateUpdate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+// might need password changing functionality
+// if yes: use POST /change-password
 
-    const updateDocument = {};
-    ['name', 'email', 'password'].forEach(key => {
-        if (value[key] !== undefined) updateDocument[key] = value[key] // set the values that exist in the req.body as the values to be updated
-    });
-    const user = await User.findByIdAndUpdate(req.params.id, updateDocument, { new: true });
-    if (!user) return res.status(404).send('User with the requested ID not found');
-
-    res.send(user); 
-});
-
-router.delete('/:id', async (req, res) => {
-    const user = await User.findByIdAndDelete(req.params.id, { new: true });
-    if (!user) return res.status(404).send('User with the requested ID not found');
-
-    res.send(user);
-});
-
-function validate(user) {
+function validateUser(user) {
     const schema = Joi.object({
-        email: Joi.string().min(5).max(255).required().email(),
+        email: Joi.string().email().min(5).max(255).required(),
         password: Joi.string().min(5).max(255).required()
     });
     

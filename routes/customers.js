@@ -1,48 +1,47 @@
+const validate = require('../middleware/validate');
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
+const { User } = require('../models/user');
+const { Customer, validateCustomer } = require('../models/customer');
+const permissions = [auth, admin];
 const express = require('express');
 const router = express.Router();
-const { Customer, validate, validateUpdate } = require('../models/customer')
 
-router.get('/', async (req, res) => {
+
+router.get('/', permissions, async (req, res) => {
     const customers = await Customer.find().limit(10).sort({ name: 1 });
-    res.status(200).send(customers)    
+    res.status(200).json(customers)    
 });
 
-router.post('/', auth, async (req, res) => {
-    const { error, value } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+router.get('/:id', [auth, validate()], async (req, res) => {
+    const customer = await Customer.findById(req.params.id);
 
-    const customer = await Customer.insertOne({
-        isGold: req.body.isGold,
-        name: req.body.name,
-        phone: req.body.phone
-    }, { new: true });
+    if (!customer) return res.status(404).json({ error: 'The customer with the given ID was not found!' });
 
-    res.status(201).send(customer);
+    res.status(200).json(customer);    
 });
 
-router.put('/:id', auth, async (req, res) => {
-    const { error, value } = validateUpdate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+// might want a post route here in case workers fail
+router.put('/:id', [auth, validate(validateCustomer)], async (req, res) => {
+    const user = await User.findById(req.body.userId);
+    if (!user) return res.status(400).json({ error: 'Associated user does not exist' });
 
-// need to determine a shortcut for putting the values into the json. one by one is tedious
-// hence the lasck of implementation
-// gpt came in clutch
     const updateDocument = {};
-    ['isGold', 'name', 'phone'].forEach(key => {
-        if (value[key] !== undefined) updateDocument[key] = value[key] // set the values that exist in the req.body as the values to be updated
+    ['userId', 'isGold', 'name', 'phone'].forEach(key => {
+        if (req.body[key] !== undefined) updateDocument[key] = req.body[key];
     });
-    const customer = await Customer.findByIdAndUpdate(req.params.id, updateDocument, { new: true });
-    if (!customer) return res.status(404).send('Customer with the requested ID not found');
 
-    res.send(customer); 
+    const customer = await Customer.findByIdAndUpdate(req.params.id, updateDocument, { new: true });
+    if (!customer) return res.status(404).json({ error: 'Customer with the requested ID not found' });
+
+    res.status(200).json(customer); 
 });
 
-router.delete('/:id', auth, async (req, res) => {
-    const customer = await Customer.findByIdAndDelete(req.params.id, { new: true });
-    if (!customer) return res.status(404).send('Customer with the requested ID not found');
+router.delete('/:id', [auth, validate()], async (req, res) => {
+    const customer = await Customer.findByIdAndDelete(req.params.id);
+    if (!customer) return res.status(404).json({ error: 'Customer with the requested ID not found' });
 
-    res.send(customer);
+    res.status(200).json(customer);
 });
 
 module.exports = router;

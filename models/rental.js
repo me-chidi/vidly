@@ -9,14 +9,14 @@ const rentalSchema = new mongoose.Schema({
                 type: String,
                 required: true,
                 minLength: 5,
-                maxLength: 50
+                maxLength: 255
             },
             isGold: { type: Boolean, required: true },
             phone: {
                 type: String,
                 required: true,
                 minLength: 5,
-                maxLength: 50
+                maxLength: 255
             }
         }),
         required: true
@@ -78,4 +78,4 @@ function validateRental(rental) {
 }
 
 module.exports.Rental = Rental;
-module.exports.validate = validateRental;   
+module.exports.validateRental = validateRental;   

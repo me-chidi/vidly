@@ -15,7 +15,7 @@ describe('validate middleware', () => {
 
         res = {
             status: jest.fn().mockReturnThis(),
-            send: jest.fn().mockReturnThis()
+            json: jest.fn().mockReturnThis()
         };
 
         next = jest.fn();
@@ -32,7 +32,7 @@ describe('validate middleware', () => {
         validateMiddleware(req, res, next);
 
         expect(res.status).toHaveBeenCalledWith(404);
-        expect(res.send).toHaveBeenCalledWith('Invalid ID.');
+        expect(res.json).toHaveBeenCalledWith({ error: 'Invalid ID.' });
     });
 
     it('should return 400 if invalid data', () => {
@@ -44,6 +44,6 @@ describe('validate middleware', () => {
         validateMiddleware(req, res, next);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.send).toHaveBeenCalled();
+        expect(res.json).toHaveBeenCalled();
     });
 });

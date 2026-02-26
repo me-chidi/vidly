@@ -1,4 +1,3 @@
-const { truncate } = require('lodash');
 const { Genre } = require('../../models/genre');
 const { User } = require('../../models/user');
 const mongoose = require('mongoose');
@@ -53,8 +52,8 @@ describe('/api/genres', () => {
             name = 'genre1';
         });
 
-        const exec = async () => {
-            return await request(server)
+        const exec = () => {
+            return request(server)
                 .post('/api/genres')
                 .set('x-auth-token', token)
                 .send({ name });
@@ -114,8 +113,8 @@ describe('/api/genres', () => {
             id = new mongoose.Types.ObjectId();
         });
 
-        const exec = async () => {
-            return await request(server)
+        const exec = () => {
+            return request(server)
                 .put(`/api/genres/${id}`)
                 .set('x-auth-token', token)
                 .send({ name });
@@ -183,8 +182,8 @@ describe('/api/genres', () => {
             genre = await Genre.insertOne(document);
         });
 
-        const exec = async () => {
-            return await request(server)
+        const exec = () => {
+            return request(server)
                 .delete(`/api/genres/${id}`)
                 .set('x-auth-token', token)
         }

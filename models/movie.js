@@ -32,8 +32,8 @@ const Movie = mongoose.model('Movie', movieSchema);
 
 function validateMovie(movie) {
     const schema = Joi.object({
-        title: Joi.string().required().min(5),
-        genreId: Joi.string().required(), // better to use genreId here to prevent bloat
+        title: Joi.string().required().min(5).max(255),
+        genreId: Joi.objectId().required(), // better to use genreId here to prevent bloat
         numberInStock: Joi.number().required().min(0),
         dailyRentalRate: Joi.number().required().min(0)
     });
@@ -43,7 +43,7 @@ function validateMovie(movie) {
 
 function validateMovieUpdate(movie) {
     const schema = Joi.object({
-        title: Joi.string().min(5),
+        title: Joi.string().min(5).max(255),
         genreId: Joi.objectId().required(),
         numberInStock: Joi.number().min(0),
         dailyRentalRate: Joi.number().min(0)

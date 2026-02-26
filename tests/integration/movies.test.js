@@ -1,4 +1,5 @@
 const { Movie } = require('../../models/movie');
+const { Genre } = require('../../models/genre');
 const { User } = require('../../models/user');
 const mongoose = require('mongoose');
 const request = require('supertest');
@@ -6,39 +7,54 @@ let server;
 
 
 describe('/api/movies', () => {
-    beforeEach(() => { server = require('../../index'); });
+    let token;
+    let genreInDb;
+    let movie;
+    let returnedMovieObj;
+
+    beforeEach(async () => { 
+        server = require('../../index');
+        token = new User({ isAdmin: true }).generateAuthToken();
+        genreInDb = await Genre.insertOne({ name: 'genre1' });
+        movie = {
+            title: 'movie1',
+            genreId: genreInDb._id,
+            numberInStock: 10,
+            dailyRentalRate: 15
+        };
+        returnedMovieObj = {
+            title: 'movie1',
+            genre: {
+                _id: genreInDb._id,
+                name: genreInDb.name
+            },
+            numberInStock: 10,
+            dailyRentalRate: 15
+        };
+     });
     afterEach(async () => { 
         server.close();
         await Movie.deleteMany({});
+        await Genre.deleteMany({});
     });
 
     describe('GET /', () => {
         it('should return all movies', async () => {
-            await Movie.insertMany([
-                { name: 'movie1' },
-                { name: 'movie2' },
-            ]);
+            await Movie.insertOne(returnedMovieObj);
+            
             const res = await request(server).get('/api/movies');
+
             expect(res.status).toBe(200);
-            expect(res.body.some(g => g.name === 'movie1')).toBeTruthy();
-            expect(res.body.some(g => g.name === 'movie2')).toBeTruthy();
+            expect(res.body.some(m => m.title === movie.title)).toBeTruthy();
         });
     });
 
     describe('POST /', () => {
-        let token;
-        let name;
-
-        beforeEach(() => {
-            token = new User().generateAuthToken();
-            name = 'movie1';
-        });
-
-        const exec = async () => {
-            return await request(server)
+        const exec = () => {
+            return request(server)
                 .post('/api/movies')
                 .set('x-auth-token', token)
-                .send({ name });
+                .send(movie);
         }
 
         it('should return 401 if client is not logged in', async () => {
@@ -47,53 +63,50 @@ describe('/api/movies', () => {
             expect(res.status).toBe(401);
         });
 
-        it('should return 400 if movie name is less than 5 characters', async () => {
-            name = '1234';
+        it('should return 403 if client is not admin', async () => {
+            token = new User({ isAdmin: false }).generateAuthToken();
+            const res = await exec();
+            expect(res.status).toBe(403);
+        });
+        
+        it('should return 400 if movie.genreId is not found', async () => {
+            movie.genreId = new mongoose.Types.ObjectId();
+            
+            const res = await exec();
+            
+            expect(res.status).toBe(400);
+        });
+        
+        it('should return 400 if movie.numberInStock is less than 0', async () => {
+            movie.numberInStock = -1;
             const res = await exec();
             expect(res.status).toBe(400);
         });
-
-        it('should return 400 if movie name is more than 50 characters', async () => {
-            name = new Array(52).join('a');
-
+        
+        it('should save and return the movie if it is valid', async () => {
             const res = await exec();
+            const movieInDb = await Movie.findOne({ title: 'movie1' });
 
-            expect(res.status).toBe(400);
-        });
-
-        it('should save the movie if it is valid', async () => {
-            await exec();
-            const movie = await Movie.find({ name: 'movie1' });
-            expect(movie).not.toBeNull();
-        });
-
-        it('should return the movie if it is valid', async () => {
-            const res = await exec();
-            expect(res.body).toHaveProperty('_id');
-            expect(res.body).toHaveProperty('name', 'movie1');
+            expect(movieInDb).not.toBeNull();
+            expect(res.body).toHaveProperty('title', 'movie1');
+            expect(res.body).toHaveProperty('genre.name', 'genre1');
         });
     });
 
     describe('PUT /', () => {
-        let token;
-        let name;
-        let updateDocument;
-        let options;
-        let id;
+        let movie1;
 
-        beforeEach(() => {
-            token = new User().generateAuthToken();
-            name = 'movie1';
-            updateDocument = {};
-            options = { new: true };
-            id = new mongoose.Types.ObjectId();
+        beforeEach(async () => {
+            movie1 = await Movie.insertOne(returnedMovieObj);
         });
 
-        const exec = async () => {
+        const exec = async (id=movie1._id) => {
             return await request(server)
                 .put(`/api/movies/${id}`)
                 .set('x-auth-token', token)
-                .send({ name });
+                .send(movie); 
+                // we send movie and not movie1 because it's in the format our API accepts data
+                // movie1 is in the format of output data
         }
 
         it('should return 401 if client is not logged in', async () => {
@@ -102,54 +115,58 @@ describe('/api/movies', () => {
             expect(res.status).toBe(401);
         });
 
-        it('should return 400 if movie name is less than 5 characters', async () => {
-            name = '1234';
+        it('should return 403 if client is not admin', async () => {
+            token = new User({ isAdmin: false }).generateAuthToken();
+            const res = await exec();
+            expect(res.status).toBe(403);
+        });
+        
+        it('should return 400 if no update field is defined', async () => {
+            movie = {};
             const res = await exec();
             expect(res.status).toBe(400);
         });
 
-        it('should return 400 if movie name is more than 50 characters', async () => {
-            name = new Array(52).join('a');
+        it('should return 400 if an invalid property is passed', async () => {
+            movie.title = '1234';
             const res = await exec();
             expect(res.status).toBe(400);
+        });
+
+        it('should return 404 if movie.genreId is not found', async () => {
+            movie.genreId = new mongoose.Types.ObjectId();
+            
+            const res = await exec();
+            
+            expect(res.status).toBe(404);
         });
 
         it('should return 404 if movie with given ID not found', async () => {
-            updateDocument = { name: 'newmovie1' };
-            const res = await exec();
-
-            const movie = await Movie.findByIdAndUpdate(id, updateDocument, options);
+            const res = await exec(new mongoose.Types.ObjectId());
 
             expect(res.status).toBe(404);
-            expect(movie).toBeNull(); // returns null if no doc
+            expect(res.body).toEqual({});
         });
 
          it('should update and return the movie if it is valid', async () => {
-            const newMovie = await Movie.insertOne({ name });
-            id = newMovie._id
-            updateDocument = { name: 'newmovie1' };
+            movie.title = 'newmovie1';
 
             const res = await exec();
-            const movie = await Movie.findByIdAndUpdate(id, updateDocument, options);
-            
+
             expect(res.status).toBe(200);
-            expect(movie).toMatchObject(updateDocument);
+            expect(res.body).toHaveProperty('title', 'newmovie1');
+            expect(res.body).toHaveProperty('genre.name', 'genre1');
         });
     });
 
     describe('DELETE /', () => {
-        let token;
-        let id;
-        let movie;
-        let document = { name: 'movie1' };
+        let movie1;
 
         beforeEach(async () => {
-            token = new User().generateAuthToken();
-            id = new mongoose.Types.ObjectId();
-            movie = await Movie.insertOne(document);
+            movie1 = await Movie.insertOne(returnedMovieObj);
         });
 
-        const exec = async () => {
+        const exec = async (id=movie1._id) => {
             return await request(server)
                 .delete(`/api/movies/${id}`)
                 .set('x-auth-token', token)
@@ -162,26 +179,22 @@ describe('/api/movies', () => {
         });
 
         it('should return 403 if client is not admin', async () => {
+            token = new User({ isAdmin: false }).generateAuthToken();
             const res = await exec();
             expect(res.status).toBe(403);
         });
 
         it('should return 404 if movie with given ID not found', async () => {
-            token = new User({ isAdmin: true }).generateAuthToken();
-
-            const res = await exec();
+            const res = await exec(new mongoose.Types.ObjectId());
             expect(res.status).toBe(404);
         });
 
         it('should delete and return movie if valid', async () => {
-            token = new User({ isAdmin: true }).generateAuthToken();
-
-            id = movie._id;
             const res = await exec();
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('_id');
-            expect(res.body).toHaveProperty('name', 'movie1');
+            expect(res.body).toHaveProperty('title', 'movie1');
         });
     });
 });
