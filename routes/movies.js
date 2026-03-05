@@ -9,13 +9,12 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     const movies = await Movie.find().limit(10).sort({ name: 1 });
-    res.status(200).send(movies)    
+    res.status(200).json(movies);  
 });
 
 router.post('/', [...permissions, validate(validateMovie)], async (req, res) => {
-    // in order to build some sort of relationship and consistency
     const genre = await Genre.findById(req.body.genreId);
-    if (!genre) return res.status(400).send('Genre with the requested ID not found!')
+    if (!genre) return res.status(400).json({ error: 'Genre with the requested ID not found!' });
 
     const movie = await Movie.insertOne({
         title: req.body.title,
@@ -27,12 +26,12 @@ router.post('/', [...permissions, validate(validateMovie)], async (req, res) => 
         dailyRentalRate: req.body.dailyRentalRate
     }, { new: true });
 
-    res.status(201).send(movie);
+    res.status(201).json(movie);
 });
 
 router.put('/:id', [...permissions, validate(validateMovieUpdate)], async (req, res) => {
     const genre = await Genre.findById(req.body.genreId);
-    if (!genre) return res.status(404).send('Genre with the requested ID not found!')
+    if (!genre) return res.status(404).json({ error: 'Genre with the requested ID not found!' });
 
     const updateDocument = {};
     ['title', 'genreId', 'numberInStock', 'dailyRentalRate'].forEach(key => {
@@ -47,16 +46,16 @@ router.put('/:id', [...permissions, validate(validateMovieUpdate)], async (req, 
         }
     });
     const movie = await Movie.findByIdAndUpdate(req.params.id, updateDocument, { new: true });
-    if (!movie) return res.status(404).send('Movie with the requested ID not found');
+    if (!movie) return res.status(404).json({ error: 'Movie with the requested ID not found' });
 
-    res.send(movie);
+    res.json(movie);
 });
 
 router.delete('/:id', [...permissions, validate()], async (req, res) => {
     const movie = await Movie.findByIdAndDelete(req.params.id);
-    if (!movie) return res.status(404).send('Movie with the requested ID not found');
+    if (!movie) return res.status(404).json({ error: 'Movie with the requested ID not found' });
 
-    res.send(movie);
+    res.json(movie);
 });
 
 module.exports = router;

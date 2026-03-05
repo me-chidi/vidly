@@ -1,4 +1,4 @@
 {
     "jwtPrivateKey": "",
-    "db": "mongodb://admin:ownerisme@localhost:27018/vidly?authSource=admin"
+    "db": "mongodb://localhost:27018/vidly?replicaSet=rs0&directConnection=true"
 }

@@ -4,10 +4,9 @@ require('winston-mongodb');
 const logger = winston.createLogger({
     level: 'info',
     transports: [
-        // new winston.transports.Console({ level: 'info' }),
         new winston.transports.File({ filename: 'logfile.log', level: 'error' }),
         new winston.transports.MongoDB({
-            db: 'mongodb://admin:ownerisme@localhost:27018/vidly?authSource=admin',
+            db: 'mongodb://localhost:27018/vidly?replicaSet=rs0&directConnection=true',
             level: 'error'
         })
     ],

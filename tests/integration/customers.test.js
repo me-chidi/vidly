@@ -19,20 +19,15 @@ describe('/api/customers', () => {
             email: 'user1@domain.com',
             password: 'password',
         };
-        await request(server)
-            .post('/api/users')
-            .send(user);
-
-        userInDb = await User.findOne({ name: 'user1' });
-        customerInDb = await Customer.findOne({ name: userInDb.name });
-        token = userInDb.generateAuthToken();
-        
+        userInDb = await User.insertOne(user);
         customer = {
             userId: userInDb._id,
             isGold: false,
             name: 'customer1',
             phone: '123456789'
         };
+        customerInDb = await Customer.insertOne(customer);
+        token = userInDb.generateAuthToken();
     });
     afterEach(async () => { 
         await Customer.deleteMany({});
@@ -69,7 +64,7 @@ describe('/api/customers', () => {
             const res = await exec();
 
             expect(res.status).toBe(200);
-            expect(res.body.some(c => c.name === user.name)).toBeTruthy();
+            expect(res.body.some(c => c.name === customerInDb.name)).toBeTruthy();
         });
     });
 
@@ -96,7 +91,7 @@ describe('/api/customers', () => {
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('_id');
-            expect(res.body).toHaveProperty('name', userInDb.name);
+            expect(res.body).toHaveProperty('name', customerInDb.name);
         });
     });
 
@@ -129,6 +124,7 @@ describe('/api/customers', () => {
         it('should return 400 if customer.userId is not found', async () => {
             customer.userId = new mongoose.Types.ObjectId();
             const res = await exec();
+
             expect(res.status).toBe(400);
             expect(res.body).toHaveProperty('error');
         });
@@ -141,11 +137,12 @@ describe('/api/customers', () => {
         });
 
          it('should update and return the customer if it is valid', async () => {
+            customer.name = 'newcustomer1';
             const res = await exec();
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('userId');
-            expect(res.body).toHaveProperty('name', 'customer1');
+            expect(res.body).toHaveProperty('name', 'newcustomer1');
         });
     });
 
@@ -172,7 +169,7 @@ describe('/api/customers', () => {
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('_id');
-            expect(res.body).toHaveProperty('name', userInDb.name);
+            expect(res.body).toHaveProperty('name', customerInDb.name);
         });
     });
 });

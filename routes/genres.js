@@ -7,7 +7,6 @@ const router = express.Router();
 const permissions = [auth, admin];
 
 router.get('/', async (req, res) => {
-    // throw new Error('Could not get the genres');
     const genres = await Genre.find().limit(10).sort({ name: 1 });
     res.status(200).json(genres);    
 });

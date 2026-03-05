@@ -5,13 +5,13 @@ const moment = require('moment');
 const rentalSchema = new mongoose.Schema({
     customer: { 
         type: new mongoose.Schema({
+            isGold: { type: Boolean, required: true },
             name: {
                 type: String,
                 required: true,
                 minLength: 5,
                 maxLength: 255
             },
-            isGold: { type: Boolean, required: true },
             phone: {
                 type: String,
                 required: true,

@@ -53,7 +53,6 @@ function validateUserUpdate(user) {
     const schema = Joi.object({
         name: Joi.string().min(5).max(255),
         email: Joi.string().min(5).max(255).email(),
-        password: Joi.string(),
     }).min(1);
     
     return schema.validate(user);

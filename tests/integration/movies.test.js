@@ -93,7 +93,7 @@ describe('/api/movies', () => {
         });
     });
 
-    describe('PUT /', () => {
+    describe('PUT /:id', () => {
         let movie1;
 
         beforeEach(async () => {
@@ -145,7 +145,7 @@ describe('/api/movies', () => {
             const res = await exec(new mongoose.Types.ObjectId());
 
             expect(res.status).toBe(404);
-            expect(res.body).toEqual({});
+            expect(res.body).toHaveProperty('error');
         });
 
          it('should update and return the movie if it is valid', async () => {
@@ -159,7 +159,7 @@ describe('/api/movies', () => {
         });
     });
 
-    describe('DELETE /', () => {
+    describe('DELETE /:id', () => {
         let movie1;
 
         beforeEach(async () => {

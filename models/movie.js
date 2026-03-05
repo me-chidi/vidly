@@ -47,7 +47,7 @@ function validateMovieUpdate(movie) {
         genreId: Joi.objectId().required(),
         numberInStock: Joi.number().min(0),
         dailyRentalRate: Joi.number().min(0)
-    }).min(1); // require at least one field
+    }).min(1);
 
     return schema.validate(movie);
 }

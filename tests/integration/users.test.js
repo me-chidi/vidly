@@ -115,7 +115,7 @@ describe('/api/users', () => {
         });
     });
 
-    describe('PUT /', () => {
+    describe('PUT /:id', () => {
         const exec = async (id=userInDb._id) => {
             return await request(server)
                 .put(`/api/users/${id}`)
@@ -136,12 +136,12 @@ describe('/api/users', () => {
         });
 
         it('should return 400 if an invalid property is passed', async () => {
-            user.name = '1234';
             const res = await exec();
             expect(res.status).toBe(400);
         });
 
         it('should return 404 if user with given ID not found', async () => {
+            delete user.password;
             const res = await exec(new mongoose.Types.ObjectId());
 
             expect(res.status).toBe(404);
@@ -149,6 +149,7 @@ describe('/api/users', () => {
         });
 
          it('should update and return the user if it is valid', async () => {
+            delete user.password;
             user.name = 'newuser1';
             
             const res = await exec();
@@ -158,7 +159,7 @@ describe('/api/users', () => {
         });
     });
 
-    describe('DELETE /', () => {
+    describe('DELETE /:id', () => {
         const exec = async (id=userInDb._id) => {
             return await request(server)
                 .delete(`/api/users/${id}`)

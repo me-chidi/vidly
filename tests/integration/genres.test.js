@@ -8,8 +8,8 @@ let server;
 describe('/api/genres', () => {
     beforeEach(() => { server = require('../../index'); });
     afterEach(async () => { 
-        server.close();
         await Genre.deleteMany({});
+        server.close();
     });
 
     describe('GET /', () => {
@@ -77,8 +77,8 @@ describe('/api/genres', () => {
             expect(res.status).toBe(400);
         });
 
-        it('should return 400 if genre name is more than 50 characters', async () => {
-            name = new Array(52).join('a');
+        it('should return 400 if genre name is more than 255 characters', async () => {
+            name = new Array(257).join('a');
 
             const res = await exec();
 
@@ -98,7 +98,7 @@ describe('/api/genres', () => {
         });
     });
 
-    describe('PUT /', () => {
+    describe('PUT /:id', () => {
         let token;
         let name;
         let updateDocument;
@@ -139,9 +139,9 @@ describe('/api/genres', () => {
             expect(res.status).toBe(400);
         });
 
-        it('should return 400 if genre name is more than 50 characters', async () => {
+        it('should return 400 if genre name is more than 255 characters', async () => {
             token = new User({ isAdmin: true }).generateAuthToken();
-            name = new Array(52).join('a');
+            name = new Array(257).join('a');
             const res = await exec();
             expect(res.status).toBe(400);
         });
@@ -170,7 +170,7 @@ describe('/api/genres', () => {
         });
     });
 
-    describe('DELETE /', () => {
+    describe('DELETE /:id', () => {
         let token;
         let id;
         let genre;

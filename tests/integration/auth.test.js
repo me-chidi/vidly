@@ -1,6 +1,7 @@
+jest.mock('bcrypt');
+const bcrypt = require('bcrypt');
 const { User } = require('../../models/user');
 const { Genre } = require('../../models/genre');
-const { Customer } = require('../../models/customer');
 const request = require('supertest');
 let server;
 
@@ -46,58 +47,58 @@ describe('/api/auth', () => {
 
     beforeEach(async () => {
         server = require('../../index');
+        await User.insertOne({
+            name: 'user1',
+            email: 'user1@domain.com',
+            password: 'password'
+        });
         user = {
             email: 'user1@domain.com',
             password: 'password'
         };
-        await request(server)
-            .post('/api/users')
-            .send({
-                name: 'user1',
-                email: 'user1@domain.com',
-                password: 'password'
-            });
+        bcrypt.compare = jest.fn(async (a, b) => a === b);
     });
     
     afterEach(async () => { 
         await User.deleteMany({});
-        await Customer.deleteMany({});
         server.close();
     });
+    
+    describe('POST /', () => {
+        const exec = () => {
+            return request(server)
+                .post('/api/auth')
+                .send(user);
+        }
 
-    const exec = () => {
-        return request(server)
-            .post('/api/auth')
-            .send(user);
-    }
-
-    it('should return 400 if email or password is not provided', async () => {
-        delete user.email;
-        const res = await exec();
-
-        expect(res.status).toBe(400);
-    });
-
-    it('should return 400 if user is not found', async () => {
-        user.email = 'notuser1@domain.com';
-        const res = await exec();
-
-        expect(res.status).toBe(400);
-        expect(res.body.error).toBe('Invalid email or password');
-    });
-
-    it('should return 400 if password is invalid', async () => {
-        user.password = 'notpassword';
-        const res = await exec();
-
-        expect(res.status).toBe(400);
-        expect(res.body.error).toBe('Invalid email or password');
-    });
-
-    it('should generate and send token if valid user', async () => {
-        const res = await exec();
-
-        expect(res.status).toBe(200);
-        expect(res.body).toHaveProperty('token');
+        it('should return 400 if email or password is not provided', async () => {
+            delete user.email;
+            const res = await exec();
+    
+            expect(res.status).toBe(400);
+        });
+    
+        it('should return 400 if user is not found', async () => {
+            user.email = 'notuser1@domain.com';
+            const res = await exec();
+    
+            expect(res.status).toBe(400);
+            expect(res.body.error).toBe('Invalid email or password');
+        });
+    
+        it('should return 400 if password is invalid', async () => {
+            user.password = 'notpassword';
+            const res = await exec();
+    
+            expect(res.status).toBe(400);
+            expect(res.body.error).toBe('Invalid email or password');
+        });
+    
+        it('should generate and send token if valid user', async () => {
+            const res = await exec();
+    
+            expect(res.status).toBe(200);
+            expect(res.body).toHaveProperty('token');
+        });
     });
 });

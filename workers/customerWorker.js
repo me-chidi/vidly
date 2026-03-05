@@ -2,7 +2,7 @@ const logger = require('../startup/logging');
 const { Worker } = require('bullmq');
 const { Customer } = require('../models/customer');
 
-const worker = new Worker('userEvents', async job => {
+const worker = new Worker('userQueue', async job => {
     if (job.name === 'userCreated') {
         await Customer.insertOne({
             userId: job.data._id,
@@ -22,3 +22,5 @@ worker.on('completed', job => {
 worker.on('failed', (job, err) => {
     logger.error(`Job [${job.name}:${job.id}] has failed with error:: ${err.message}`);
 });
+
+module.exports = worker;

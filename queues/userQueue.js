@@ -1,6 +1,6 @@
 const { Queue } = require('bullmq');
 
-const userQueue = new Queue('userEvents', {
+const userQueue = new Queue('userQueue', {
     connection: {
         host: 'localhost',
         port: 6379
