@@ -1,4 +1,6 @@
 {
     "jwtPrivateKey": "",
-    "db": "mongodb://localhost:27018/vidly?replicaSet=rs0&directConnection=true"
+    "db": "mongodb://localhost:27018/vidly?replicaSet=rs0&directConnection=true",
+    "redisHost": "",
+    "redisPort": ""
 }

@@ -1,0 +1,67 @@
+services:
+  # 1. Express API
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongodb:27017/vidly?replicaSet=rs0
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongo-init:
+        condition: service_completed_successfully
+
+  # 2. MongoDB Database
+  mongodb:
+    image: mongo:8.0
+    restart: always
+    healthcheck:
+      test: echo "db.runCommand('ping').ok" | mongosh localhost:27017 --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "27017:27017"
+    # environment:
+    #   - MONGO_INITDB_ROOT_USERNAME=admin
+    #   - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongodb:/data/db
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+
+  # 2. Automation Helper (Runs once then exits)
+  mongo-init:
+    image: mongo:8.0
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    # entrypoint: [ "/bin/sh", "-c" ]
+    command: >
+      mongosh --host mongodb:27017 --eval 
+      'try { rs.initiate({_id: "rs0", members: [{_id: 0, host: "mongodb:27017"}]}) } catch (e) { print("Already initiated") }'
+
+  # 3. Redis (for BullMQ/Caching)
+  redis:
+    image: redis:8.0-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--appendonly", "yes"] 
+
+
+volumes:
+  mongodb:
+  redis-data:

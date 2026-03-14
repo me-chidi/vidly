@@ -13,7 +13,7 @@ const express = require('express');
 
 module.exports = function(app) {
     app.use(express.json());
-    // app.use(morgan('tiny'));
+    app.use(morgan('tiny'));
     // app.use(debug);
     app.use('/api/users', users);
     app.use('/api/auth', auth);

@@ -1,4 +1,5 @@
 const winston = require('winston');
+const config = require('config');
 require('winston-mongodb');
 
 const logger = winston.createLogger({
@@ -6,7 +7,7 @@ const logger = winston.createLogger({
     transports: [
         new winston.transports.File({ filename: 'logfile.log', level: 'error' }),
         new winston.transports.MongoDB({
-            db: 'mongodb://localhost:27018/vidly?replicaSet=rs0&directConnection=true',
+            db: config.get('db'),
             level: 'error'
         })
     ],

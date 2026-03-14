@@ -1,10 +1,6 @@
+const { connection } = require('../startup/db');
 const { Queue } = require('bullmq');
 
-const userQueue = new Queue('userQueue', {
-    connection: {
-        host: 'localhost',
-        port: 6379
-    }
-});
+const userQueue = new Queue('userQueue', { connection });
 
 module.exports = userQueue;

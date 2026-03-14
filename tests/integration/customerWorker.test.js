@@ -1,6 +1,7 @@
 const logger = require('../../startup/logging');
 const _ = require('lodash');
 const { QueueEvents, Job } = require('bullmq');
+const config = require('config');
 const { Customer } = require('../../models/customer');
 const { User } = require('../../models/user');
 const userQueue = require('../../queues/userQueue');
@@ -14,7 +15,7 @@ describe('on userCreated', () => {
     let jobId;
 
     beforeEach(async () => {
-        require('../../startup/db')();
+        require('../../startup/db').db();
         await userQueue.waitUntilReady();
         logger.info('userQueue is ready');
 
@@ -23,7 +24,10 @@ describe('on userCreated', () => {
             email: 'user1@domain.com',
             password: 'password',
         });
-        userEvents = new QueueEvents('userQueue');
+        userEvents = new QueueEvents('userQueue', { connection: {
+            host: config.get('redisHost'),
+            port: parseInt(config.get('redisPort'))
+        }});
 
         const addedJob = await userQueue.add('userCreated', _.pick(user, ['_id', 'name']));
         jobId = addedJob.id;

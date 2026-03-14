@@ -1,3 +1,4 @@
+const { connection } = require('../startup/db');
 const logger = require('../startup/logging');
 const { Worker } = require('bullmq');
 const { Customer } = require('../models/customer');
@@ -9,7 +10,7 @@ const worker = new Worker('userQueue', async job => {
             name: job.data.name,
         });
     }
-}, { connection: { host: 'localhost', port: 6379 } });
+}, { connection });
 
 worker.on('error', err => {
     logger.error('Worker error:', err);
