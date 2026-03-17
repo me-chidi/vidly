@@ -5,10 +5,9 @@ const config = require('config');
 module.exports.db = function() {
     const db = config.get('db'); 
     const connectWithRetry = function() {
-        logger.info('Attempting to connect to MongoDB Replica Set...');
-        
+        // logger.info('Attempting to connect to MongoDB Replica Set...');
         mongoose.connect(db, {
-            serverSelectionTimeoutMS: 5000,
+            serverSelectionTimeoutMS: 10000,
             socketTimeoutMS: 45000,
             family: 4,
         })

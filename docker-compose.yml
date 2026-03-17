@@ -1,5 +1,4 @@
 services:
-  # 1. Express API
   api:
     build: .
     ports:
@@ -7,6 +6,7 @@ services:
     environment:
       - NODE_ENV=development
       - MONGO_URI=mongodb://mongodb:27017/vidly?replicaSet=rs0
+      - MONGO_URI_TEST=mongodb://mongodb:27017/vidly_tests?replicaSet=rs0
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     depends_on:
@@ -17,7 +17,6 @@ services:
       mongo-init:
         condition: service_completed_successfully
 
-  # 2. MongoDB Database
   mongodb:
     image: mongo:8.0
     restart: always
@@ -28,25 +27,19 @@ services:
       retries: 5
     ports:
       - "27017:27017"
-    # environment:
-    #   - MONGO_INITDB_ROOT_USERNAME=admin
-    #   - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
       - mongodb:/data/db
     command: ["--replSet", "rs0", "--bind_ip_all"]
 
-  # 2. Automation Helper (Runs once then exits)
   mongo-init:
     image: mongo:8.0
     depends_on:
       mongodb:
         condition: service_healthy
-    # entrypoint: [ "/bin/sh", "-c" ]
     command: >
       mongosh --host mongodb:27017 --eval 
       'try { rs.initiate({_id: "rs0", members: [{_id: 0, host: "mongodb:27017"}]}) } catch (e) { print("Already initiated") }'
 
-  # 3. Redis (for BullMQ/Caching)
   redis:
     image: redis:8.0-alpine
     restart: always

@@ -2,3 +2,4 @@ node_modules/
 coverage/
 rds.js
 *.log
+mongo-keyfile

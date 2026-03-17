@@ -1,15 +1,10 @@
 const winston = require('winston');
-const config = require('config');
-require('winston-mongodb');
 
 const logger = winston.createLogger({
     level: 'info',
     transports: [
-        new winston.transports.File({ filename: 'logfile.log', level: 'error' }),
-        new winston.transports.MongoDB({
-            db: config.get('db'),
-            level: 'error'
-        })
+        new winston.transports.Console({ format: winston.format.simple() }),
+        new winston.transports.File({ filename: 'logfile.log', level: 'error' })
     ],
     exceptionHandlers: [
         new winston.transports.File({ filename: 'uncaughtExceptions.log' })
@@ -29,7 +24,7 @@ process.on('unhandledRejection', (ex) => {
 });
 
 if (process.env.NODE_ENV !== 'production') {
-    logger.add(new winston.transports.Console({ format: winston.format.simple() }));
+    // logger.add(new winston.transports.Console({ format: winston.format.simple() }));
     // format.simple includes the stack trace we dont want that
     // remove it on your next grind
 }

@@ -1,0 +1,78 @@
+services:
+  api:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb:27017/vidly?authSource=admin&replicaSet=rs0
+      - MONGO_URI_TEST=mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb:27017/vidly_tests?authSource=admin&replicaSet=rs0
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongo-init:
+        condition: service_completed_successfully
+
+  mongodb:
+    image: mongo:8.0
+    restart: unless-stopped
+    healthcheck:
+      test: mongosh --host mongodb:27017 -u ${MONGO_USERNAME} -p ${MONGO_PASSWORD} --authenticationDatabase admin --eval "db.runCommand('ping').ok" --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+    secrets:
+      - source: mongo_keyfile
+    command: ["--replSet", "rs0", "--keyFile", "/run/secrets/mongo_keyfile", "--bind_ip_all"]
+
+  mongo-init:
+    image: mongo:8.0
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    command: >
+      bash -c "
+      until mongosh --host mongodb:27017 -u $$MONGO_INITDB_ROOT_USERNAME -p $$MONGO_INITDB_ROOT_PASSWORD --authenticationDatabase admin --eval 'db.adminCommand({ping:1})' &>/dev/null; do
+        echo 'Waiting for MongoDB auth to be ready...'
+        sleep 2
+      done;
+      echo 'Auth ready! Initiating replica set...';
+      mongosh --host mongodb:27017 -u $$MONGO_INITDB_ROOT_USERNAME -p $$MONGO_INITDB_ROOT_PASSWORD --authenticationDatabase admin --eval \"try { rs.initiate({_id: 'rs0', members: [{_id: 0, host: 'mongodb:27017'}]}) } catch (e) { print('Already initiated') }\"
+      "
+
+  redis:
+    image: redis:8.0-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--appendonly", "yes"] 
+
+volumes:
+  mongo-data:
+  redis-data:
+
+secrets:
+  mongo_keyfile:
+    file: ./mongo-keyfile
