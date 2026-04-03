@@ -1,7 +1,7 @@
 jest.mock('bcrypt');
 const bcrypt = require('bcrypt');
-const { User } = require('../../models/user');
-const { Genre } = require('../../models/genre');
+const { User } = require('../../src/models/user');
+const { Genre } = require('../../src/models/genre');
 const request = require('supertest');
 let server;
 
@@ -9,7 +9,7 @@ describe('testing the auth middleware', () => {
     let token;
 
     beforeEach(() => {
-        server = require('../../index');
+        server = require('../../src/index');
         token = new User({ isAdmin: true }).generateAuthToken();
     });
     afterEach(async () => { 
@@ -46,7 +46,7 @@ describe('/api/auth', () => {
     let user;
 
     beforeEach(async () => {
-        server = require('../../index');
+        server = require('../../src/index');
         await User.insertOne({
             name: 'user1',
             email: 'user1@domain.com',

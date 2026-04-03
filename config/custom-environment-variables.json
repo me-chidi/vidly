@@ -1,6 +1,6 @@
 {
     "jwtPrivateKey": "VIDLY_JWT_PRIVATE_KEY",
     "db": "MONGO_URI",
-    "redisHost": "REDIS_HOST",
+    "redisHost": "REDIS_URL",
     "redisPort": "REDIS_PORT"
 }

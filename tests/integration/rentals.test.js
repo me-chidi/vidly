@@ -1,8 +1,8 @@
-const { Rental } = require('../../models/rental');
-const { Genre } = require('../../models/genre');
-const { Movie } = require('../../models/movie');
-const { User } = require('../../models/user');
-const { Customer } = require('../../models/customer');
+const { Rental } = require('../../src/models/rental');
+const { Genre } = require('../../src/models/genre');
+const { Movie } = require('../../src/models/movie');
+const { User } = require('../../src/models/user');
+const { Customer } = require('../../src/models/customer');
 const mongoose = require('mongoose');
 const request = require('supertest');
 let server;
@@ -18,7 +18,7 @@ describe('/api/rentals', () => {
     let returnedRentalObj;
 
     beforeEach(async () => { 
-        server = require('../../index');
+        server = require('../../src/index');
         userInDb = await User.insertOne({ 
             name: 'user1', 
             email: 'user1@domain.com', 

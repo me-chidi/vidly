@@ -1,5 +1,5 @@
-const { Customer } = require('../../models/customer');
-const { User } = require('../../models/user');
+const { Customer } = require('../../src/models/customer');
+const { User } = require('../../src/models/user');
 const mongoose = require('mongoose');
 const request = require('supertest');
 let server;
@@ -13,7 +13,7 @@ describe('/api/customers', () => {
     let user;
 
     beforeEach(async () => { 
-        server = require('../../index');
+        server = require('../../src/index');
         user = {
             name: 'user1',
             email: 'user1@domain.com',

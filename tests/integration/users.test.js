@@ -1,10 +1,10 @@
 jest.mock('bcrypt');
 jest.mock('../../queues/userQueue');
-const { User } = require('../../models/user');
+const { User } = require('../../src/models/user');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const request = require('supertest');
-const userQueue = require('../../queues/userQueue');
+const userQueue = require('../../src/queues/userQueue');
 let server;
 
 describe('/api/users', () => {
@@ -18,7 +18,7 @@ describe('/api/users', () => {
         bcrypt.hash.mockResolvedValue('hashedPassword');
         userQueue.add = jest.fn();
         
-        server = require('../../index');
+        server = require('../../src/index');
         user = {
             name: 'user1',
             email: 'user1@domain.com',

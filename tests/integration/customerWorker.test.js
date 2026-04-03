@@ -1,11 +1,11 @@
-const logger = require('../../startup/logging');
+const logger = require('../../src/startup/logging');
 const _ = require('lodash');
 const { QueueEvents, Job } = require('bullmq');
 const config = require('config');
-const { Customer } = require('../../models/customer');
-const { User } = require('../../models/user');
-const userQueue = require('../../queues/userQueue');
-const worker = require('../../workers/customerWorker');
+const { Customer } = require('../../src/models/customer');
+const { User } = require('../../src/models/user');
+const userQueue = require('../../src/queues/userQueue');
+const worker = require('../../src/workers/customerWorker');
 
 jest.setTimeout(20000);
 
@@ -15,7 +15,7 @@ describe('on userCreated', () => {
     let jobId;
 
     beforeEach(async () => {
-        require('../../startup/db').db();
+        require('../../src/startup/db').db();
         await userQueue.waitUntilReady();
         logger.info('userQueue is ready');
 

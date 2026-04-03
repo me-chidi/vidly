@@ -1,6 +1,6 @@
-const { Movie } = require('../../models/movie');
-const { Genre } = require('../../models/genre');
-const { User } = require('../../models/user');
+const { Movie } = require('../../src/models/movie');
+const { Genre } = require('../../src/models/genre');
+const { User } = require('../../src/models/user');
 const mongoose = require('mongoose');
 const request = require('supertest');
 let server;
@@ -13,7 +13,7 @@ describe('/api/movies', () => {
     let returnedMovieObj;
 
     beforeEach(async () => { 
-        server = require('../../index');
+        server = require('../../src/index');
         token = new User({ isAdmin: true }).generateAuthToken();
         genreInDb = await Genre.insertOne({ name: 'genre1' });
         movie = {

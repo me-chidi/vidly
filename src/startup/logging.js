@@ -4,13 +4,13 @@ const logger = winston.createLogger({
     level: 'info',
     transports: [
         new winston.transports.Console({ format: winston.format.simple() }),
-        new winston.transports.File({ filename: 'logfile.log', level: 'error' })
+        new winston.transports.File({ filename: '../../logfile.log', level: 'error' })
     ],
     exceptionHandlers: [
-        new winston.transports.File({ filename: 'uncaughtExceptions.log' })
+        new winston.transports.File({ filename: '../../uncaughtExceptions.log' })
     ],
     rejectionHandlers: [
-        new winston.transports.File({ filename: 'unhandledRejections.log' })
+        new winston.transports.File({ filename: '../../unhandledRejections.log' })
     ]
 });
 
