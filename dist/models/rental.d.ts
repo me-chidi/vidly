@@ -1,173 +1,33 @@
-export const Rental: mongoose.Model<{
+import Joi from 'joi';
+import mongoose from 'mongoose';
+declare const Rental: RentalModel;
+declare function validateRental(rental: RentalObject): Joi.ValidationResult<any>;
+interface Rental {
     customer: {
-        name: string;
-        isGold: boolean;
-        phone: string;
-    };
-    movie: {
-        title: string;
-        dailyRentalRate: number;
-    };
-    dateOut: NativeDate;
-    dateReturned?: NativeDate | null;
-    rentalFee?: number | null;
-}, {}, {}, {
-    id: string;
-}, mongoose.Document<unknown, {}, {
-    customer: {
-        name: string;
-        isGold: boolean;
-        phone: string;
-    };
-    movie: {
-        title: string;
-        dailyRentalRate: number;
-    };
-    dateOut: NativeDate;
-    dateReturned?: NativeDate | null;
-    rentalFee?: number | null;
-}, {
-    id: string;
-}, mongoose.DefaultSchemaOptions> & Omit<{
-    customer: {
-        name: string;
-        isGold: boolean;
-        phone: string;
-    };
-    movie: {
-        title: string;
-        dailyRentalRate: number;
-    };
-    dateOut: NativeDate;
-    dateReturned?: NativeDate | null;
-    rentalFee?: number | null;
-} & {
-    _id: mongoose.Types.ObjectId;
-} & {
-    __v: number;
-}, "id"> & {
-    id: string;
-}, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, {
-    customer: {
-        name: string;
-        isGold: boolean;
-        phone: string;
-    };
-    movie: {
-        title: string;
-        dailyRentalRate: number;
-    };
-    dateOut: NativeDate;
-    dateReturned?: NativeDate | null;
-    rentalFee?: number | null;
-}, mongoose.Document<unknown, {}, {
-    customer: {
-        name: string;
-        isGold: boolean;
-        phone: string;
-    };
-    movie: {
-        title: string;
-        dailyRentalRate: number;
-    };
-    dateOut: NativeDate;
-    dateReturned?: NativeDate | null;
-    rentalFee?: number | null;
-}, {
-    id: string;
-}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<{
-    customer: {
-        name: string;
-        isGold: boolean;
-        phone: string;
-    };
-    movie: {
-        title: string;
-        dailyRentalRate: number;
-    };
-    dateOut: NativeDate;
-    dateReturned?: NativeDate | null;
-    rentalFee?: number | null;
-} & {
-    _id: mongoose.Types.ObjectId;
-} & {
-    __v: number;
-}, "id"> & {
-    id: string;
-}, {
-    [path: string]: mongoose.SchemaDefinitionProperty<undefined, any, any>;
-} | {
-    [x: string]: mongoose.SchemaDefinitionProperty<any, any, mongoose.Document<unknown, {}, {
-        customer: {
-            name: string;
-            isGold: boolean;
-            phone: string;
-        };
-        movie: {
-            title: string;
-            dailyRentalRate: number;
-        };
-        dateOut: NativeDate;
-        dateReturned?: NativeDate | null;
-        rentalFee?: number | null;
-    }, {
-        id: string;
-    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<{
-        customer: {
-            name: string;
-            isGold: boolean;
-            phone: string;
-        };
-        movie: {
-            title: string;
-            dailyRentalRate: number;
-        };
-        dateOut: NativeDate;
-        dateReturned?: NativeDate | null;
-        rentalFee?: number | null;
-    } & {
         _id: mongoose.Types.ObjectId;
-    } & {
-        __v: number;
-    }, "id"> & {
-        id: string;
-    }> | undefined;
-}, {
-    customer: {
-        name: string;
         isGold: boolean;
+        name: string;
         phone: string;
     };
     movie: {
+        _id: mongoose.Types.ObjectId;
         title: string;
         dailyRentalRate: number;
     };
-    dateOut: NativeDate;
-    dateReturned?: NativeDate | null;
-    rentalFee?: number | null;
-} & {
-    _id: mongoose.Types.ObjectId;
-} & {
-    __v: number;
-}>, {
-    customer: {
-        name: string;
-        isGold: boolean;
-        phone: string;
-    };
-    movie: {
-        title: string;
-        dailyRentalRate: number;
-    };
-    dateOut: NativeDate;
-    dateReturned?: NativeDate | null;
-    rentalFee?: number | null;
-} & {
-    _id: mongoose.Types.ObjectId;
-} & {
-    __v: number;
-}>;
-export function validateRental(rental: any): Joi.ValidationResult<any>;
-import mongoose = require("mongoose");
-import Joi = require("joi");
+    dateOut: Date;
+    dateReturned?: Date;
+    rentalFee?: number;
+}
+interface RentalDocument extends Rental, mongoose.Document {
+    return(): void;
+}
+interface RentalModel extends mongoose.Model<RentalDocument> {
+    lookup(customerId: mongoose.Types.ObjectId, movieId: mongoose.Types.ObjectId): Promise<RentalDocument>;
+}
+interface RentalObject {
+    customerId: mongoose.Types.ObjectId;
+    movieId: mongoose.Types.ObjectId;
+}
+export { Rental, validateRental };
+export type { RentalDocument, RentalObject, RentalModel };
 //# sourceMappingURL=rental.d.ts.map

@@ -1,1 +1,1 @@
-{"version":3,"file":"userQueue.d.ts","sourceRoot":"","sources":["../../src/queues/userQueue.js"],"names":[],"mappings":";AAGA,mEAAyD"}
+{"version":3,"file":"userQueue.d.ts","sourceRoot":"","sources":["../../src/queues/userQueue.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,KAAK,EAAE,MAAM,QAAQ,CAAC;AAE/B,QAAA,MAAM,SAAS,2CAAyC,CAAC;AAEzD,eAAe,SAAS,CAAC"}

@@ -1,100 +1,98 @@
-export const Genre: mongoose.Model<{
-    name: string;
-}, {}, {}, {
-    id: string;
-}, mongoose.Document<unknown, {}, {
-    name: string;
-}, {
-    id: string;
-}, mongoose.DefaultSchemaOptions> & Omit<{
-    name: string;
-} & {
+import Joi from 'joi';
+import mongoose from 'mongoose';
+declare const genreSchema: mongoose.Schema<GenreDocument, mongoose.Model<GenreDocument, any, any, any, (mongoose.Document<unknown, any, GenreDocument, any, mongoose.DefaultSchemaOptions> & GenreDocument & Required<{
     _id: mongoose.Types.ObjectId;
-} & {
+}> & {
     __v: number;
-}, "id"> & {
-    id: string;
-}, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, {
-    name: string;
-}, mongoose.Document<unknown, {}, {
-    name: string;
-}, {
-    id: string;
-}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<{
-    name: string;
 } & {
+    id: string;
+}) | (mongoose.Document<unknown, any, GenreDocument, any, mongoose.DefaultSchemaOptions> & GenreDocument & Required<{
     _id: mongoose.Types.ObjectId;
-} & {
+}> & {
+    __v: number;
+}), any, GenreDocument>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, GenreDocument, mongoose.Document<unknown, {}, GenreDocument, {
+    id: string;
+}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<GenreDocument & Required<{
+    _id: mongoose.Types.ObjectId;
+}> & {
     __v: number;
 }, "id"> & {
     id: string;
 }, {
-    [path: string]: mongoose.SchemaDefinitionProperty<undefined, any, any>;
-} | {
-    [x: string]: mongoose.SchemaDefinitionProperty<any, any, mongoose.Document<unknown, {}, {
-        name: string;
-    }, {
+    _id?: mongoose.SchemaDefinitionProperty<mongoose.Types.ObjectId, GenreDocument, mongoose.Document<unknown, {}, GenreDocument, {
         id: string;
-    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<{
-        name: string;
-    } & {
+    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<GenreDocument & Required<{
         _id: mongoose.Types.ObjectId;
-    } & {
+    }> & {
         __v: number;
     }, "id"> & {
         id: string;
-    }> | undefined;
-}, {
-    name: string;
-} & {
-    _id: mongoose.Types.ObjectId;
-} & {
-    __v: number;
-}>, {
-    name: string;
-} & {
-    _id: mongoose.Types.ObjectId;
-} & {
-    __v: number;
-}>;
-export function validateGenre(genre: any): Joi.ValidationResult<any>;
-export const genreSchema: mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, {
-    name: string;
-}, mongoose.Document<unknown, {}, {
-    name: string;
-}, {
+    }>;
+    name?: mongoose.SchemaDefinitionProperty<string, GenreDocument, mongoose.Document<unknown, {}, GenreDocument, {
+        id: string;
+    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<GenreDocument & Required<{
+        _id: mongoose.Types.ObjectId;
+    }> & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }>;
+}, GenreDocument>;
+declare const Genre: mongoose.Model<GenreDocument, {}, {}, {
     id: string;
-}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<{
-    name: string;
-} & {
+}, mongoose.Document<unknown, {}, GenreDocument, {
+    id: string;
+}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<GenreDocument & Required<{
     _id: mongoose.Types.ObjectId;
+}> & {
+    __v: number;
+}, "id"> & {
+    id: string;
+}, mongoose.Schema<GenreDocument, mongoose.Model<GenreDocument, any, any, any, (mongoose.Document<unknown, any, GenreDocument, any, mongoose.DefaultSchemaOptions> & GenreDocument & Required<{
+    _id: mongoose.Types.ObjectId;
+}> & {
+    __v: number;
 } & {
+    id: string;
+}) | (mongoose.Document<unknown, any, GenreDocument, any, mongoose.DefaultSchemaOptions> & GenreDocument & Required<{
+    _id: mongoose.Types.ObjectId;
+}> & {
+    __v: number;
+}), any, GenreDocument>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, GenreDocument, mongoose.Document<unknown, {}, GenreDocument, {
+    id: string;
+}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<GenreDocument & Required<{
+    _id: mongoose.Types.ObjectId;
+}> & {
     __v: number;
 }, "id"> & {
     id: string;
 }, {
-    [path: string]: mongoose.SchemaDefinitionProperty<undefined, any, any>;
-} | {
-    [x: string]: mongoose.SchemaDefinitionProperty<any, any, mongoose.Document<unknown, {}, {
-        name: string;
-    }, {
+    _id?: mongoose.SchemaDefinitionProperty<mongoose.Types.ObjectId, GenreDocument, mongoose.Document<unknown, {}, GenreDocument, {
         id: string;
-    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<{
-        name: string;
-    } & {
+    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<GenreDocument & Required<{
         _id: mongoose.Types.ObjectId;
-    } & {
+    }> & {
         __v: number;
     }, "id"> & {
         id: string;
-    }> | undefined;
-}, {
+    }>;
+    name?: mongoose.SchemaDefinitionProperty<string, GenreDocument, mongoose.Document<unknown, {}, GenreDocument, {
+        id: string;
+    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<GenreDocument & Required<{
+        _id: mongoose.Types.ObjectId;
+    }> & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }>;
+}, GenreDocument>, GenreDocument>;
+declare function validateGenre(genre: GenreObject): Joi.ValidationResult<any>;
+interface GenreDocument extends mongoose.Document {
     name: string;
-} & {
-    _id: mongoose.Types.ObjectId;
-} & {
-    __v: number;
-}>;
-import mongoose = require("mongoose");
-import Joi = require("joi");
+}
+interface GenreObject {
+    name: string;
+}
+export { Genre, validateGenre, genreSchema };
+export type { GenreDocument };
 //# sourceMappingURL=genre.d.ts.map

@@ -1,6 +1,8 @@
-export function db(): void;
-export namespace connection {
-    let host: any;
-    let port: number;
+export default function db(): void;
+export declare const connection: RedisConnection;
+interface RedisConnection {
+    host: string;
+    port: number;
 }
+export {};
 //# sourceMappingURL=db.d.ts.map

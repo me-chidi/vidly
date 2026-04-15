@@ -1,3 +1,4 @@
-declare function _exports(err: any, req: any, res: any, next: any): void;
-export = _exports;
+import type { ErrorRequestHandler } from '#types/index';
+declare const error: ErrorRequestHandler;
+export default error;
 //# sourceMappingURL=error.d.ts.map

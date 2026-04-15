@@ -1,4 +1,4 @@
-export = logger;
+import winston from 'winston';
 declare const logger: winston.Logger;
-import winston = require("winston");
+export default logger;
 //# sourceMappingURL=logging.d.ts.map

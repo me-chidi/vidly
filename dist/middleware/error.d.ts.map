@@ -1,1 +1,1 @@
-{"version":3,"file":"error.d.ts","sourceRoot":"","sources":["../../src/middleware/error.js"],"names":[],"mappings":"AAEiB,yEAIhB"}
+{"version":3,"file":"error.d.ts","sourceRoot":"","sources":["../../src/middleware/error.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,mBAAmB,EAAE,MAAM,cAAc,CAAC;AAKxD,QAAA,MAAM,KAAK,EAAE,mBAIZ,CAAA;AAED,eAAe,KAAK,CAAC"}

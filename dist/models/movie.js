@@ -1,8 +1,15 @@
 "use strict";
-const { genreSchema } = require('./genre');
-const Joi = require('joi');
-const mongoose = require('mongoose');
-const movieSchema = new mongoose.Schema({
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Movie = void 0;
+exports.validateMovie = validateMovie;
+exports.validateMovieUpdate = validateMovieUpdate;
+const genre_1 = require("./genre");
+const joi_1 = __importDefault(require("joi"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const movieSchema = new mongoose_1.default.Schema({
     title: {
         type: String,
         required: true,
@@ -11,7 +18,7 @@ const movieSchema = new mongoose.Schema({
         maxLength: 255
     },
     genre: {
-        type: genreSchema,
+        type: genre_1.genreSchema,
         required: true
     },
     numberInStock: {
@@ -27,26 +34,27 @@ const movieSchema = new mongoose.Schema({
         max: 50
     }
 });
-const Movie = mongoose.model('Movie', movieSchema);
+const Movie = mongoose_1.default.model('Movie', movieSchema);
+exports.Movie = Movie;
 function validateMovie(movie) {
-    const schema = Joi.object({
-        title: Joi.string().required().min(5).max(255),
-        genreId: Joi.objectId().required(), // better to use genreId here to prevent bloat
-        numberInStock: Joi.number().required().min(0),
-        dailyRentalRate: Joi.number().required().min(0)
+    const schema = joi_1.default.object({
+        title: joi_1.default.string().required().min(5).max(255),
+        genreId: joi_1.default.string().hex().length(24).required().messages({
+            '*': 'Provide a valid ObjectID'
+        }), // better to use genreId here to prevent bloat
+        numberInStock: joi_1.default.number().required().min(0),
+        dailyRentalRate: joi_1.default.number().required().min(0)
     });
     return schema.validate(movie);
 }
 function validateMovieUpdate(movie) {
-    const schema = Joi.object({
-        title: Joi.string().min(5).max(255),
-        genreId: Joi.objectId().required(),
-        numberInStock: Joi.number().min(0),
-        dailyRentalRate: Joi.number().min(0)
+    const schema = joi_1.default.object({
+        title: joi_1.default.string().min(5).max(255),
+        genreId: joi_1.default.string().hex().length(24).required().messages({
+            '*': 'Provide a valid ObjectID'
+        }),
+        numberInStock: joi_1.default.number().min(0),
+        dailyRentalRate: joi_1.default.number().min(0)
     }).min(1);
     return schema.validate(movie);
 }
-module.exports.Movie = Movie;
-module.exports.validateMovie = validateMovie;
-module.exports.validateMovieUpdate = validateMovieUpdate;
-//# sourceMappingURL=movie.js.map

@@ -1,24 +1,29 @@
 "use strict";
-const { connection } = require('../startup/db');
-const logger = require('../startup/logging');
-const { Worker } = require('bullmq');
-const { Customer } = require('../models/customer');
-const worker = new Worker('userQueue', async (job) => {
-    if (job.name === 'userCreated') {
-        await Customer.insertOne({
-            userId: job.data._id,
-            name: job.data.name,
-        });
-    }
-}, { connection });
-worker.on('error', err => {
-    logger.error('Worker error:', err);
-});
-worker.on('completed', job => {
-    logger.info(`Job [${job.name}:${job.id}] has completed!`);
-});
-worker.on('failed', (job, err) => {
-    logger.error(`Job [${job.name}:${job.id}] has failed with error:: ${err.message}`);
-});
-module.exports = worker;
-//# sourceMappingURL=customerWorker.js.map
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const db_1 = require("#startup/db");
+const logging_1 = __importDefault(require("#startup/logging"));
+const customer_1 = require("#models/customer");
+const bullmq_1 = require("bullmq");
+function setUpCustomerWorker() {
+    const worker = new bullmq_1.Worker('userQueue', async (job) => {
+        if (job.name === 'userCreated') {
+            await customer_1.Customer.create({
+                userId: job.data._id,
+                name: job.data.name,
+            });
+        }
+    }, { connection: db_1.connection });
+    worker.on('error', (err) => {
+        logging_1.default.error('Worker error:', err);
+    });
+    worker.on('completed', (job) => {
+        logging_1.default.info(`Job [${job.name}:${job.id}] has completed!`);
+    });
+    worker.on('failed', (job, err) => {
+        logging_1.default.error(`Job [${job?.name}:${job?.id}] has failed with error:: ${err.message}`);
+    });
+}
+exports.default = setUpCustomerWorker;

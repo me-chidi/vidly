@@ -1,10 +1,16 @@
 "use strict";
-const Joi = require('joi');
-const mongoose = require('mongoose');
-const moment = require('moment');
-const rentalSchema = new mongoose.Schema({
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Rental = void 0;
+exports.validateRental = validateRental;
+const joi_1 = __importDefault(require("joi"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const moment_1 = __importDefault(require("moment"));
+const rentalSchema = new mongoose_1.default.Schema({
     customer: {
-        type: new mongoose.Schema({
+        type: new mongoose_1.default.Schema({
             isGold: { type: Boolean, required: true },
             name: {
                 type: String,
@@ -22,7 +28,7 @@ const rentalSchema = new mongoose.Schema({
         required: true
     },
     movie: {
-        type: new mongoose.Schema({
+        type: new mongoose_1.default.Schema({
             title: {
                 type: String,
                 required: true,
@@ -60,17 +66,19 @@ rentalSchema.statics.lookup = function (customerId, movieId) {
 };
 rentalSchema.methods.return = function () {
     this.dateReturned = new Date();
-    const rentalDays = moment().diff(this.dateOut, 'days'); // might need to change to dayjs or luxon
+    const rentalDays = (0, moment_1.default)().diff(this.dateOut, 'days'); // might need to change to dayjs or luxon
     this.rentalFee = this.movie.dailyRentalRate * rentalDays;
 };
-const Rental = mongoose.model('Rental', rentalSchema);
+const Rental = mongoose_1.default.model('Rental', rentalSchema);
+exports.Rental = Rental;
 function validateRental(rental) {
-    const schema = Joi.object({
-        customerId: Joi.objectId().required(),
-        movieId: Joi.objectId().required()
+    const schema = joi_1.default.object({
+        customerId: joi_1.default.string().hex().length(24).required().messages({
+            '*': 'Provide a valid ObjectID'
+        }),
+        movieId: joi_1.default.string().hex().length(24).required().messages({
+            '*': 'Provide a valid ObjectID'
+        })
     });
     return schema.validate(rental);
 }
-module.exports.Rental = Rental;
-module.exports.validateRental = validateRental;
-//# sourceMappingURL=rental.js.map

@@ -1,8 +1,12 @@
 "use strict";
-const helmet = require('helmet');
-const compression = require('compression');
-module.exports = function (app) {
-    app.use(helmet());
-    app.use(compression());
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-//# sourceMappingURL=prod.js.map
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = prodSettings;
+const helmet_1 = __importDefault(require("helmet"));
+const compression_1 = __importDefault(require("compression"));
+function prodSettings(app) {
+    app.use((0, helmet_1.default)());
+    app.use((0, compression_1.default)());
+}

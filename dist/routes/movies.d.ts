@@ -1,3 +1,4 @@
-export = router;
-declare const router: import("express-serve-static-core").Router;
+import * as exp from '#types/index';
+declare const router: exp.Router;
+export default router;
 //# sourceMappingURL=movies.d.ts.map

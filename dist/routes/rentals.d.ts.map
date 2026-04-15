@@ -1,1 +1,1 @@
-{"version":3,"file":"rentals.d.ts","sourceRoot":"","sources":["../../src/routes/rentals.js"],"names":[],"mappings":";AAQA,iEAAgC"}
+{"version":3,"file":"rentals.d.ts","sourceRoot":"","sources":["../../src/routes/rentals.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,GAAG,MAAM,cAAc,CAAC;AAUpC,QAAA,MAAM,MAAM,EAAE,GAAG,CAAC,MAAyB,CAAC;AAkD5C,eAAe,MAAM,CAAC"}

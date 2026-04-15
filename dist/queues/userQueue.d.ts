@@ -1,4 +1,4 @@
-export = userQueue;
+import { Queue } from 'bullmq';
 declare const userQueue: Queue<any, any, string, any, any, string>;
-import { Queue } from "bullmq/dist/esm/classes/queue";
+export default userQueue;
 //# sourceMappingURL=userQueue.d.ts.map

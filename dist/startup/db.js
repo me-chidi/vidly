@@ -1,29 +1,34 @@
 "use strict";
-const mongoose = require('mongoose');
-const logger = require('./logging');
-const config = require('config');
-module.exports.db = function () {
-    const db = config.get('db');
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.connection = void 0;
+exports.default = db;
+const mongoose_1 = __importDefault(require("mongoose"));
+const config_1 = __importDefault(require("config"));
+const logging_1 = __importDefault(require("./logging"));
+function db() {
+    const db = config_1.default.get('db');
     const connectWithRetry = function () {
         // logger.info('Attempting to connect to MongoDB Replica Set...');
-        mongoose.connect(db, {
+        mongoose_1.default.connect(db, {
             serverSelectionTimeoutMS: 10000,
             socketTimeoutMS: 45000,
             family: 4,
         })
             .then(() => {
-            logger.info(`Connected to ${db}...`);
+            logging_1.default.info(`Connected to ${db}...`);
         })
             .catch((err) => {
-            logger.error(`MongoDB connection unsuccessful, retrying in 5 seconds...\nmessage: ${err.message}`);
+            logging_1.default.error(`MongoDB connection unsuccessful, retrying in 5 seconds...\nmessage: ${err.message}`);
             setTimeout(connectWithRetry, 5000);
         });
     };
     connectWithRetry();
-    mongoose.set('transactionAsyncLocalStorage', true);
+    mongoose_1.default.set('transactionAsyncLocalStorage', true);
+}
+exports.connection = {
+    host: config_1.default.get('redisHost'),
+    port: parseInt(config_1.default.get('redisPort'))
 };
-module.exports.connection = {
-    host: config.get('redisHost'),
-    port: parseInt(config.get('redisPort'))
-};
-//# sourceMappingURL=db.js.map

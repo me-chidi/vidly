@@ -1,93 +1,87 @@
-export const Customer: mongoose.Model<{
-    name: string;
-    isGold: boolean;
-    userId: mongoose.Types.ObjectId;
-    phone?: string | null;
-}, {}, {}, {
+import Joi from 'joi';
+import mongoose from 'mongoose';
+declare const Customer: mongoose.Model<CustomerDocument, {}, {}, {
     id: string;
-}, mongoose.Document<unknown, {}, {
-    name: string;
-    isGold: boolean;
-    userId: mongoose.Types.ObjectId;
-    phone?: string | null;
-}, {
+}, mongoose.Document<unknown, {}, CustomerDocument, {
     id: string;
-}, mongoose.DefaultSchemaOptions> & Omit<{
-    name: string;
-    isGold: boolean;
-    userId: mongoose.Types.ObjectId;
-    phone?: string | null;
-} & {
+}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<CustomerDocument & Required<{
     _id: mongoose.Types.ObjectId;
-} & {
+}> & {
     __v: number;
 }, "id"> & {
     id: string;
-}, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, {
-    name: string;
-    isGold: boolean;
-    userId: mongoose.Types.ObjectId;
-    phone?: string | null;
-}, mongoose.Document<unknown, {}, {
-    name: string;
-    isGold: boolean;
-    userId: mongoose.Types.ObjectId;
-    phone?: string | null;
-}, {
-    id: string;
-}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<{
-    name: string;
-    isGold: boolean;
-    userId: mongoose.Types.ObjectId;
-    phone?: string | null;
-} & {
+}, mongoose.Schema<CustomerDocument, mongoose.Model<CustomerDocument, any, any, any, (mongoose.Document<unknown, any, CustomerDocument, any, mongoose.DefaultSchemaOptions> & CustomerDocument & Required<{
     _id: mongoose.Types.ObjectId;
+}> & {
+    __v: number;
 } & {
+    id: string;
+}) | (mongoose.Document<unknown, any, CustomerDocument, any, mongoose.DefaultSchemaOptions> & CustomerDocument & Required<{
+    _id: mongoose.Types.ObjectId;
+}> & {
+    __v: number;
+}), any, CustomerDocument>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, CustomerDocument, mongoose.Document<unknown, {}, CustomerDocument, {
+    id: string;
+}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<CustomerDocument & Required<{
+    _id: mongoose.Types.ObjectId;
+}> & {
     __v: number;
 }, "id"> & {
     id: string;
 }, {
-    [path: string]: mongoose.SchemaDefinitionProperty<undefined, any, any>;
-} | {
-    [x: string]: mongoose.SchemaDefinitionProperty<any, any, mongoose.Document<unknown, {}, {
-        name: string;
-        isGold: boolean;
-        userId: mongoose.Types.ObjectId;
-        phone?: string | null;
-    }, {
+    _id?: mongoose.SchemaDefinitionProperty<mongoose.Types.ObjectId, CustomerDocument, mongoose.Document<unknown, {}, CustomerDocument, {
         id: string;
-    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<{
-        name: string;
-        isGold: boolean;
-        userId: mongoose.Types.ObjectId;
-        phone?: string | null;
-    } & {
+    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<CustomerDocument & Required<{
         _id: mongoose.Types.ObjectId;
-    } & {
+    }> & {
         __v: number;
     }, "id"> & {
         id: string;
-    }> | undefined;
-}, {
-    name: string;
-    isGold: boolean;
+    }>;
+    name?: mongoose.SchemaDefinitionProperty<string, CustomerDocument, mongoose.Document<unknown, {}, CustomerDocument, {
+        id: string;
+    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<CustomerDocument & Required<{
+        _id: mongoose.Types.ObjectId;
+    }> & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }>;
+    userId?: mongoose.SchemaDefinitionProperty<mongoose.Types.ObjectId, CustomerDocument, mongoose.Document<unknown, {}, CustomerDocument, {
+        id: string;
+    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<CustomerDocument & Required<{
+        _id: mongoose.Types.ObjectId;
+    }> & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }>;
+    isGold?: mongoose.SchemaDefinitionProperty<boolean, CustomerDocument, mongoose.Document<unknown, {}, CustomerDocument, {
+        id: string;
+    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<CustomerDocument & Required<{
+        _id: mongoose.Types.ObjectId;
+    }> & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }>;
+    phone?: mongoose.SchemaDefinitionProperty<string, CustomerDocument, mongoose.Document<unknown, {}, CustomerDocument, {
+        id: string;
+    }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<CustomerDocument & Required<{
+        _id: mongoose.Types.ObjectId;
+    }> & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }>;
+}, CustomerDocument>, CustomerDocument>;
+declare function validateCustomer(customer: Partial<CustomerDocument>): Joi.ValidationResult<any>;
+interface CustomerDocument extends mongoose.Document {
     userId: mongoose.Types.ObjectId;
-    phone?: string | null;
-} & {
-    _id: mongoose.Types.ObjectId;
-} & {
-    __v: number;
-}>, {
-    name: string;
     isGold: boolean;
-    userId: mongoose.Types.ObjectId;
-    phone?: string | null;
-} & {
-    _id: mongoose.Types.ObjectId;
-} & {
-    __v: number;
-}>;
-export function validateCustomer(customer: any): Joi.ValidationResult<any>;
-import mongoose = require("mongoose");
-import Joi = require("joi");
+    name: string;
+    phone: string;
+}
+export { Customer, validateCustomer };
+export type { CustomerDocument };
 //# sourceMappingURL=customer.d.ts.map

@@ -1,3 +1,2 @@
-declare function _exports(): void;
-export = _exports;
+export default function validateConfig(): void;
 //# sourceMappingURL=config.d.ts.map

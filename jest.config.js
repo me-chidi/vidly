@@ -1,9 +1,29 @@
+const { createDefaultPreset } = require('ts-jest');
+
+const presetConfig = createDefaultPreset();
+
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  testEnvironment: 'node',
-  setupFiles: ['<rootDir>/tests/setup.js'],
-  verbose: true,
-  collectCoverage: true,
-  coverageDirectory: 'coverage',
-  coveragePathIgnorePatterns: ['/node_modules/'],
-  detectOpenHandles: true,
+    ...presetConfig,
+    testEnvironment: "node",
+    transform: {
+        '^.+\\.tsx?$': ['ts-jest', {
+            tsconfig: 'tsconfig.test.json' 
+        }],
+    },
+    moduleNameMapper: {
+        '^#src/(.*)(?:\\.js)?$': '<rootDir>/src/$1',
+        '^#models/(.*)(?:\\.js)?$': '<rootDir>/src/models/$1',
+        '^#middleware/(.*)(?:\\.js)?$': '<rootDir>/src/middleware/$1',
+        '^#types/(.*)(?:\\.js)?$': '<rootDir>/src/types/$1',
+        '^#queues/(.*)(?:\\.js)?$': '<rootDir>/src/queues/$1',
+        '^#workers/(.*)(?:\\.js)?$': '<rootDir>/src/workers/$1',
+        '^#startup/(.*)(?:\\.js)?$': '<rootDir>/src/startup/$1'
+    },
+    setupFiles: ['<rootDir>/tests/setup.ts'],
+    verbose: true,
+    collectCoverage: true,
+    coverageDirectory: 'coverage',
+    coveragePathIgnorePatterns: ['/node_modules/'],
+    detectOpenHandles: true,
 };

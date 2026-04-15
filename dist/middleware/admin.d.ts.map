@@ -1,1 +1,1 @@
-{"version":3,"file":"admin.d.ts","sourceRoot":"","sources":["../../src/middleware/admin.js"],"names":[],"mappings":"AAAiB,8DAGhB"}
+{"version":3,"file":"admin.d.ts","sourceRoot":"","sources":["../../src/middleware/admin.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,cAAc,EAAE,MAAM,cAAc,CAAC;AAE9C,QAAA,MAAM,KAAK,EAAE,cAGZ,CAAA;AAED,eAAe,KAAK,CAAC"}

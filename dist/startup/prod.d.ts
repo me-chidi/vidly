@@ -1,3 +1,3 @@
-declare function _exports(app: any): void;
-export = _exports;
+import type { Application } from '#types/index';
+export default function prodSettings(app: Application): void;
 //# sourceMappingURL=prod.d.ts.map

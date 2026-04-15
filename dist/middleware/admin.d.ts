@@ -1,3 +1,4 @@
-declare function _exports(req: any, res: any, next: any): any;
-export = _exports;
+import { RequestHandler } from '#types/index';
+declare const admin: RequestHandler;
+export default admin;
 //# sourceMappingURL=admin.d.ts.map

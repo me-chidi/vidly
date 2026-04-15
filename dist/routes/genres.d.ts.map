@@ -1,1 +1,1 @@
-{"version":3,"file":"genres.d.ts","sourceRoot":"","sources":["../../src/routes/genres.js"],"names":[],"mappings":";AAKA,iEAAgC"}
+{"version":3,"file":"genres.d.ts","sourceRoot":"","sources":["../../src/routes/genres.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,GAAG,MAAM,cAAc,CAAC;AAQpC,QAAA,MAAM,MAAM,EAAE,GAAG,CAAC,MAAyB,CAAC;AAkC5C,eAAe,MAAM,CAAC"}

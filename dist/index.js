@@ -1,14 +1,21 @@
 "use strict";
-const logger = require('./startup/logging');
-const express = require('express');
-const app = express();
-require('./startup/routes')(app);
-require('./startup/db').db();
-require('./startup/config')();
-require('./startup/validation')();
-require('./startup/prod')(app); // might want to conditionally load this module
-require('./workers/customerWorker');
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const routes_1 = __importDefault(require("#startup/routes"));
+const db_1 = __importDefault(require("#startup/db"));
+const config_1 = __importDefault(require("#startup/config"));
+const prod_1 = __importDefault(require("#startup/prod"));
+const logging_1 = __importDefault(require("#startup/logging"));
+const customerWorker_1 = __importDefault(require("#workers/customerWorker"));
+const express_1 = __importDefault(require("express"));
+const app = (0, express_1.default)();
+(0, routes_1.default)(app);
+(0, db_1.default)();
+(0, config_1.default)();
+(0, prod_1.default)(app);
+(0, customerWorker_1.default)();
 const port = process.env.PORT || 5000;
-const server = app.listen(port, () => logger.info(`Listening on ${port}...`));
-module.exports = server;
-//# sourceMappingURL=index.js.map
+const server = app.listen(port, () => logging_1.default.info(`Listening on ${port}...`));
+exports.default = server;

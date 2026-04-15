@@ -1,1 +1,1 @@
-{"version":3,"file":"customerWorker.d.ts","sourceRoot":"","sources":["../../src/workers/customerWorker.js"],"names":[],"mappings":";AAKA,+CAOmB"}
+{"version":3,"file":"customerWorker.d.ts","sourceRoot":"","sources":["../../src/workers/customerWorker.ts"],"names":[],"mappings":"AAKA,iBAAS,mBAAmB,SAqB3B;AAED,eAAe,mBAAmB,CAAC"}

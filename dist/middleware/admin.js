@@ -1,7 +1,8 @@
 "use strict";
-module.exports = function (req, res, next) {
-    if (!req.user.isAdmin)
+Object.defineProperty(exports, "__esModule", { value: true });
+const admin = function (req, res, next) {
+    if (!req.user?.isAdmin)
         return res.status(403).json({ error: 'Access denied.' });
     next();
 };
-//# sourceMappingURL=admin.js.map
+exports.default = admin;
