@@ -2,9 +2,9 @@ jest.mock('bcrypt');
 jest.mock('#queues/userQueue');
 import type { UserDocument } from '#types/index';
 
-import { User } from '#models/user';
+import { User } from '#user/user.model';
 import userQueue from '#queues/userQueue';
-import server from '#src/index';
+import server from '#index';
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import request from 'supertest';

@@ -5,12 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("#startup/db");
 const logging_1 = __importDefault(require("#startup/logging"));
-const customer_1 = require("#models/customer");
+const customer_model_1 = require("#customer/customer.model");
 const bullmq_1 = require("bullmq");
 function setUpCustomerWorker() {
     const worker = new bullmq_1.Worker('userQueue', async (job) => {
         if (job.name === 'userCreated') {
-            await customer_1.Customer.create({
+            await customer_model_1.Customer.create({
                 userId: job.data._id,
                 name: job.data.name,
             });

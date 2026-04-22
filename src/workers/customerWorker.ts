@@ -1,9 +1,9 @@
 import { connection } from '#startup/db';
 import logger from '#startup/logging';
-import { Customer } from '#models/customer';
+import { Customer } from '#customer/customer.model';
 import { Worker, Job } from 'bullmq';
 
-function setUpCustomerWorker() {
+function setUpCustomerWorker(): Worker {
     const worker = new Worker('userQueue', async (job: Job) => {
         if (job.name === 'userCreated') {
             await Customer.create({
@@ -24,6 +24,8 @@ function setUpCustomerWorker() {
     worker.on('failed', (job: Job<any, void, string> | undefined, err: Error) => {
         logger.error(`Job [${job?.name}:${job?.id}] has failed with error:: ${err.message}`);
     });
+
+    return worker;
 }
 
 export default setUpCustomerWorker;

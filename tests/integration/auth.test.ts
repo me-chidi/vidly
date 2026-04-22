@@ -1,9 +1,9 @@
 jest.mock('bcrypt');
 import type { UserObject } from '#types/index';
 
-import { User } from '#models/user';
-import { Genre } from '#models/genre';
-import server from '#src/index';
+import { User } from '#user/user.model';
+import { Genre } from '#genre/genre.model';
+import server from '#index';
 import request from 'supertest';
 import bcrypt from 'bcrypt';
 const mockedBcrypt = jest.mocked(bcrypt);

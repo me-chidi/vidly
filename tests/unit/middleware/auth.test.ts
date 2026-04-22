@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from '#types/index';
 
-import { User } from '#models/user';
+import { User } from '#user/user.model';
 import auth from '#middleware/auth';
 import mongoose from 'mongoose';
 

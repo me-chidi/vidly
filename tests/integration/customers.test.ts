@@ -1,10 +1,10 @@
 import type { UserDocument, CustomerDocument } from '#types/index';
 
-import { Customer } from '#models/customer';
-import { User } from '#models/user';
+import { Customer } from '#customer/customer.model';
+import { User } from '#user/user.model';
 import mongoose from 'mongoose';
 import request from 'supertest';
-import server from '#src/index';
+import server from '#index';
 
 
 describe('/api/customers', () => {

@@ -1,11 +1,11 @@
 import type { MovieDocument, MovieObject, GenreDocument } from '#types/index';
 
-import { Movie } from '#models/movie';
-import { Genre } from '#models/genre';
-import { User } from '#models/user';
+import { Movie } from '#movie/movie.model';
+import { Genre } from '#genre/genre.model';
+import { User } from '#user/user.model';
 import mongoose from 'mongoose';
 import request from 'supertest';
-import server from '#src/index';
+import server from '#index';
 
 
 describe('/api/movies', () => {

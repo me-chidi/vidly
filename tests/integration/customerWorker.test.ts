@@ -1,14 +1,14 @@
 import type { UserDocument } from '#types/index';
 
 import logger from '#startup/logging';
-import { Customer } from '#models/customer';
-import { User } from '#models/user';
+import { Customer } from '#customer/customer.model';
+import { User } from '#user/user.model';
 import userQueue from '#queues/userQueue';
-import worker from '#workers/customerWorker';
+import setUpCustomerWorker from '#workers/customerWorker';
 import db from '#startup/db';
 import _ from 'lodash';
 import config from 'config';
-import { QueueEvents, Job } from 'bullmq';
+import { QueueEvents, Job, Worker } from 'bullmq';
 
 jest.setTimeout(20000);
 
@@ -16,9 +16,11 @@ describe('on userCreated', () => {
     let user: UserDocument;
     let userEvents: QueueEvents;
     let jobId: string | undefined;
+    let worker: Worker;
 
     beforeEach(async () => {
         db();
+        worker = setUpCustomerWorker();
         await userQueue.waitUntilReady();
         logger.info('userQueue is ready');
 

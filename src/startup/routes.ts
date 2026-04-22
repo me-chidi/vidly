@@ -1,13 +1,13 @@
 import type { Application } from '#types/index';
 
 import error from '#middleware/error';
-import auth from '#routes/auth';
-import users from '#routes/users';
-import rentals  from '#routes/rentals';
-import returns from '#routes/returns';
-import movies from '#routes/movies';
-import genres from '#routes/genres';
-import customers from '#routes/customers';
+import auth from '#auth/auth.routes';
+import users from '#user/user.routes';
+import rentals  from '#rental/rental.routes';
+import returns from '#return/return.routes';
+import movies from '#movie/movie.routes';
+import genres from '#genre/genre.routes';
+import customers from '#customer/customer.routes';
 import debug from 'debug';
 import morgan from 'morgan';
 import express from 'express';

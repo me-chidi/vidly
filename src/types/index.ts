@@ -9,8 +9,8 @@ export type {
     ErrorRequestHandler,
 } from 'express';
 
-export type { UserObject, UserDocument } from '#models/user';
-export type { CustomerDocument } from '#models/customer';
-export type { GenreDocument } from '#models/genre';
-export type { MovieDocument, MovieObject } from '#models/movie';
-export type { RentalDocument, RentalObject, RentalModel } from '#models/rental';
+export type { UserObject, UserDocument } from '#user/user.model';
+export type { CustomerDocument } from '#customer/customer.model';
+export type { GenreDocument } from '#genre/genre.model';
+export type { MovieDocument, MovieObject } from '#movie/movie.model';
+export type { RentalDocument, RentalObject, RentalModel } from '#rental/rental.model';

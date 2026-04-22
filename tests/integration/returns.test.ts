@@ -1,9 +1,9 @@
 import type { MovieDocument, RentalDocument } from '#types/index';
 
-import { Rental } from '#models/rental';
-import { User } from '#models/user';
-import { Movie } from '#models/movie';
-import server from '#src/index';
+import { Rental } from '#rental/rental.model';
+import { User } from '#user/user.model';
+import { Movie } from '#movie/movie.model';
+import server from '#index';
 import moment from 'moment';
 import mongoose from 'mongoose';
 import request from 'supertest';

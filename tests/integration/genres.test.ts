@@ -1,10 +1,10 @@
 import type { GenreDocument } from '#types/index';
 
-import { Genre } from '#models/genre';
-import { User } from '#models/user';
+import { Genre } from '#genre/genre.model';
+import { User } from '#user/user.model';
 import mongoose from 'mongoose';
 import request from 'supertest';
-import server from '#src/index';
+import server from '#index';
 
 
 describe('/api/genres', () => {

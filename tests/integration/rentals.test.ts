@@ -3,12 +3,12 @@ import type {
     GenreDocument, UserDocument, CustomerDocument 
 } from '#types/index';
 
-import { Rental } from '#models/rental';
-import { Genre } from '#models/genre';
-import { Movie } from '#models/movie';
-import { User } from '#models/user';
-import { Customer } from '#models/customer';
-import server from '#src/index';
+import { Rental } from '#rental/rental.model';
+import { Genre } from '#genre/genre.model';
+import { Movie } from '#movie/movie.model';
+import { User } from '#user/user.model';
+import { Customer } from '#customer/customer.model';
+import server from '#index';
 import mongoose from 'mongoose';
 import request from 'supertest';
 
